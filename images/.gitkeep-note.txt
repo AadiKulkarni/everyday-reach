@@ -1,0 +1,4 @@
+Team photos: minseo.jpg, leo.jpg, aadi.jpg.
+Creative matrix: creative-matrix.png.
+Source PDFs: margaret-persona.pdf, abstract-ladder.pdf.
+Problem illustrations and charts are inline SVGs in index.html.
