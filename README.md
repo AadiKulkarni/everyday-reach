@@ -1,12 +1,12 @@
-# DES INV 15 Project Site — Everyday Reach
+# DES INV 15 Project Site: Everyday Reach
 
 Static single-page site for a UC Berkeley **DES INV 15** (Fall 2026) design methodology course project.
 
 ## Files
 
-- `index.html` — page content and section structure
-- `styles.css` — layout, palette (CSS variables), and responsive styles
-- `images/` — team photos (`minseo.jpg`, `leo.jpg`, `aadi.jpg`), creative matrix (`creative-matrix.png`), and source PDFs (`margaret-persona.pdf`, `abstract-ladder.pdf`)
+- `index.html`: page content and section structure
+- `styles.css`: layout, palette (CSS variables), and responsive styles
+- `images/`: team photos (`minseo.jpg`, `leo.jpg`, `aadi.jpg`), creative matrix (`creative-matrix.png`), and source PDFs (`margaret-persona.pdf`, `abstract-ladder.pdf`)
 
 Problem illustrations and charts are inline SVGs in `index.html`. Persona, abstract laddering, and creative matrix sections live after How Might We.
 
