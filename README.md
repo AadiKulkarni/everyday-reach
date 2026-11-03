@@ -1,4 +1,4 @@
-# DES INV 15 Project Site: Everyday Reach
+# DES INV 15 Project Site: SpinShelf
 
 Static single-page site for a UC Berkeley **DES INV 15** (Fall 2026) design methodology course project.
 
