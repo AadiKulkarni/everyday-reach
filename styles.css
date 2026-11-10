@@ -869,6 +869,134 @@ tr + tr td {
   margin: 0;
 }
 
+/* Week 10: sketches, embeds, downloads, placeholders */
+.wk10-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  max-width: 48rem;
+}
+
+.wk10-list li + li {
+  margin-top: 0.55rem;
+}
+
+.sketch-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+
+.sketch-card {
+  margin: 0;
+}
+
+.sketch-link {
+  display: block;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.7);
+  transition: transform 0.35s var(--ease-out), border-color 0.25s var(--ease-out);
+}
+
+.sketch-link:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-border-strong);
+}
+
+.sketch-link img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.sketch-card figcaption {
+  margin-top: var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+}
+
+.embed-frame {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.embed-frame--placeholder {
+  position: relative;
+}
+
+.pdf-embed {
+  display: block;
+  width: 100%;
+  height: 600px;
+  border: 0;
+  background: #f8f6f2;
+}
+
+.media-placeholder--proto {
+  aspect-ratio: 16 / 10;
+  max-width: 640px;
+}
+
+.figure--prototype {
+  margin-top: var(--space-md);
+}
+
+.download-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: var(--space-md) 0 0;
+}
+
+.btn-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.05rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-strong);
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--color-accent);
+  font-size: 0.92rem;
+  font-weight: 650;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  transition: background 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+}
+
+.btn-download:hover {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.placeholder-note {
+  margin: var(--space-sm) 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  max-width: 42rem;
+}
+
+.placeholder-note code {
+  font-size: 0.86em;
+  word-break: break-all;
+}
+
+@media (max-width: 900px) {
+  .sketch-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sketch-link img {
+    aspect-ratio: 16 / 10;
+  }
+}
+
 @media (max-width: 700px) {
   .nav {
     flex-direction: column;
