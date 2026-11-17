@@ -87,7 +87,7 @@ button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:
     <div class="bar"><i id="prog"></i></div>
     <div class="caption" aria-live="polite">
       <span class="step" id="stepn">Demo</span>
-      <p id="cap">SpinShelf is a freestanding motorized carousel. Press a section button and that section turns to the front.</p>
+      <p id="cap">SpinShelf stands in the kitchen corner, so only its front can be reached. Press a section button and that section turns to the front.</p>
     </div>
   </section>
 
@@ -114,10 +114,17 @@ button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:
         <button class="primary" id="play">Replay demo</button>
         <button id="shell" aria-pressed="true">See-through shell</button>
       </div>
+      <div class="row">
+        <span class="seg" role="group" aria-label="Where SpinShelf stands">
+          <button id="pc" aria-pressed="true">In a corner</button>
+          <button id="pw" aria-pressed="false">Against a wall</button>
+        </span>
+      </div>
       <ul class="legend">
         <li><i style="--c:#d98a3d"></i>Motor and drive shaft in the base</li>
         <li><i style="--c:#b58a5a"></i>Shelf carousel, turns as one piece</li>
         <li><i style="--c:#33474a"></i>Push-button panel at armrest height</li>
+        <li><i style="--c:#cfccc4"></i>Kitchen walls: only the front can be reached</li>
       </ul>
     </section>
   </div>
@@ -130,8 +137,9 @@ button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:
       <div><dt>Base column diameter</dt><dd>40 cm</dd></div>
       <div><dt>Panel height</dt><dd>about 70 cm</dd></div>
       <div><dt>Quarter turn</dt><dd>about 3 s</dd></div>
+      <div><dt>Placement</dt><dd>Corner or against a wall</dd></div>
     </dl>
-    <p class="note">These numbers are working assumptions for the model, not tested values. The opening sits inside the usual seated forward-reach range (about 38 to 122 cm), and the narrow base leaves open knee space for a wheelchair. Also in the concept but not modelled here: a weight limit per section, removable bins and plug-in power. Check the numbers in the concept test.</p>
+    <p class="note">SpinShelf stands in a kitchen corner or against a wall, so its back can never be reached directly: rotating is the only way to get to it. These numbers are working assumptions for the model, not tested values. The opening sits inside the usual seated forward-reach range (about 38 to 122 cm), and the narrow base leaves open knee space for a wheelchair. Also in the concept but not modelled here: a weight limit per section, removable bins and plug-in power. Check the numbers in the concept test.</p>
   </section>
 </div>
 
@@ -214,8 +222,8 @@ const items=[
  {t:0,w:2,k:'mug',c:[.25,.4,.65,1],o:-.26,r:.2},{t:0,w:2,k:'mug',c:[.95,.72,.2,1],o:.26,r:.2},{t:2,w:2,k:'mug',c:[.3,.6,.45,1],o:0,r:.2},
  {t:0,w:3,k:'bowl',c:BW,o:0,r:.18},{t:1,w:3,k:'bowl',c:[.6,.75,.85,1],o:0,r:.18},{t:2,w:3,k:'bowl',c:BW,o:0,r:.18}
 ];
-const S={sel:0,blocked:false,shell:true,mode:'wheel',pz:2.0,pzT:.82,hand:[.2,.68,1.8],handKey:'rest',held:false,hl:false,
-  yaw:1.25,pitch:.2,dist:3.5,yawT:null,userCam:false,pressed:null,pressT:0,stopFlash:0,time:0};
+const S={sel:0,blocked:false,place:'corner',eye:[3,1.4,1.4],pitchT:null,shell:true,mode:'wheel',pz:2.0,pzT:.82,hand:[.2,.68,1.8],handKey:'rest',held:false,hl:false,
+  yaw:.75,pitch:.2,dist:3.5,yawT:null,userCam:false,pressed:null,pressT:0,stopFlash:0,time:0};
 const PARK={wheel:.82,stand:.55};
 
 const PANEL=X(T(.46,.72,.22),RY(-.5),RX(-.3));
@@ -254,12 +262,29 @@ function person(b){
   function armL(b,A,H,c1,c2){const L=.7,d=Math.min(len(sub(H,A)),L-.001),mid=lerp3(A,H,.5),drop=Math.sqrt(L*L/4-d*d/4);const E=[mid[0]+(A[0]>0?.04:-.04),mid[1]-drop*.9,mid[2]+drop*.35];
     rod(b,A,E,.045,c1);rod(b,E,H,.038,c1);sphere(b,T(E[0],E[1],E[2]),.045,c1);sphere(b,T(A[0],A[1],A[2]),.055,c1);sphere(b,T(H[0],H[1],H[2]),.042,c2);}
 }
+function room(){
+  const E=S.eye,WZ=-.37,WX=-.37,H=2.25,TH=.06,corner=S.place==='corner';
+  const wall=[.89,.88,.85,1],ghost=[.89,.88,.85,.16],cab=[.95,.94,.91,1],top=[.33,.35,.36,1],line=[.78,.77,.74,1];
+  const x0=corner?WX:-2.3,x1=2.3,z1=3.1;
+  box(OP,T((x0+x1)/2,-.01,(WZ+z1)/2),x1-x0,.02,z1-WZ,S.floor);
+  const back=E[2]>WZ;
+  box(back?OP:TR,T((x0+x1)/2-(corner?TH/2:0),H/2,WZ-TH/2),x1-x0+(corner?TH:0),H,TH,back?wall:ghost);
+  if(corner){const left=E[0]>WX;box(left?OP:TR,T(WX-TH/2,H/2,(WZ+z1)/2),TH,H,z1-WZ,left?wall:ghost);}
+  /* kitchen run next to SpinShelf: counter to the right in a corner, to the left against a wall */
+  const a=corner?.62:x0,b=corner?x1:-.46,cx=(a+b)/2,w=b-a,D=.6;
+  box(OP,T(cx,.05,WZ+D/2-.05),w,.1,D-.1,line);
+  box(OP,T(cx,.48,WZ+D/2-.02),w,.76,D-.04,cab);
+  box(OP,T(cx,.885,WZ+D/2),w+.02,.04,D+.02,top);
+  box(OP,T(cx,1.75,WZ+.17),w,.7,.34,cab);
+  const n=Math.max(1,Math.round(w/.6));
+  for(let i=1;i<n;i++){const x=a+w*i/n;box(OP,T(x,.48,WZ+D-.035),.008,.7,.01,line);box(OP,T(x,1.75,WZ+.345),.008,.66,.01,line);}
+  for(let i=0;i<n;i++){const x=a+w*(i+.5)/n;box(OP,T(x,.78,WZ+D-.03),.12,.015,.02,[.55,.56,.57,1]);box(OP,T(x,1.45,WZ+.35),.12,.015,.02,[.55,.56,.57,1]);}
+}
 function build(){
   OP.n=0;TR.n=0;const al=S.shell?.2:1,SB=S.shell?TR:OP;
   const shellC=[.93,.94,.92,al],baseC=[.2,.27,.28,S.shell?.3:1];
   const rotating=Math.abs(car.t-car.a)>.002&&!S.blocked;
-  /* floor */
-  cyl(OP,T(0,-.02,.5),2.6,.02,S.floor,{segs:48});
+  room();
   cyl(TR,T(0,.001,0),.46,.001,[0,0,0,.13],{segs:32});cyl(TR,T(0,.001,S.pz),.42,.001,[0,0,0,.1],{segs:32});
   /* base, motor, shaft */
   cyl(OP,T(0,0,0),.34,.035,[.2,.27,.28,1],{segs:36});
@@ -313,6 +338,9 @@ $('stop').onclick=()=>manual('stop',stopAll,'Stopped. The carousel holds its pos
 $('block').onclick=()=>{const b=!S.blocked;demo.on=false;setBlocked(b);setStatus(b?'Obstacle sensor: something is in the way, so rotation is paused.':'Clear. Rotation continues.');};
 $('shell').onclick=e=>{S.shell=!S.shell;e.currentTarget.setAttribute('aria-pressed',String(S.shell));};
 $('play').onclick=startDemo;
+function setPlace(p){S.place=p;$('pc').setAttribute('aria-pressed',String(p==='corner'));$('pw').setAttribute('aria-pressed',String(p==='wall'));}
+$('pc').onclick=()=>{setPlace('corner');setStatus('SpinShelf is in the kitchen corner. Walls block the back and the left side.');};
+$('pw').onclick=()=>{setPlace('wall');setStatus('SpinShelf is against the kitchen wall. The wall blocks the back.');};
 
 /* camera */
 const ptrs=new Map();let pinch=0;
@@ -328,17 +356,17 @@ cv.addEventListener('wheel',e=>{e.preventDefault();S.dist=Math.max(1.6,Math.min(
 /* ---------- demo ---------- */
 const demo={on:false,i:0,t:0};
 const STEPS=[
- {d:3.4,cap:()=>'Margaret rolls up to SpinShelf. Open knee space under the carousel lets her chair get close.',go(){S.pzT=PARK[S.mode];S.yawT=1.25;}},
- {d:3.6,cap:()=>'Her red mug is in the Mugs section, which is facing the back. In a normal cabinet that means leaning out of the chair or waiting for help.',go(){S.hl=true;S.yawT=2.0;}},
- {d:1.8,cap:()=>'She presses the Mugs button on the panel by her armrest.',go(){S.handKey='s2';S.yawT=1.0;},end(){press('s2');goSection(2);setStatus('Mugs section is turning to the front.');}},
- {d:6.4,cap:()=>'The motor starts gently and turns the carousel slowly until the Mugs section faces her.',go(){S.handKey='rest';S.yawT=1.45;}},
- {d:1.6,cap:()=>'The mug arrives at the front opening.',go(){S.yawT=1.3;}},
+ {d:3.6,cap:()=>(S.place==='corner'?'SpinShelf stands in the corner of Margaret\'s kitchen, so she can only reach it from the front.':'SpinShelf stands against Margaret\'s kitchen wall, so she can only reach it from the front.')+' Open knee space lets her chair get close.',go(){S.pzT=PARK[S.mode];S.yawT=.75;S.pitchT=.2;}},
+ {d:4.2,cap:()=>'Her red mug is in the Mugs section, at the back against the wall. She cannot get behind the cabinet, and reaching in means leaning out of her chair.',go(){S.hl=true;S.yawT=.55;S.pitchT=1.0;}},
+ {d:1.8,cap:()=>'She presses the Mugs button on the panel by her armrest.',go(){S.handKey='s2';S.yawT=.6;S.pitchT=.2;},end(){press('s2');goSection(2);setStatus('Mugs section is turning to the front.');}},
+ {d:6.4,cap:()=>'The motor starts gently and turns the carousel slowly until the Mugs section faces her.',go(){S.handKey='rest';S.yawT=.85;}},
+ {d:1.6,cap:()=>'The mug arrives at the front opening.',go(){S.yawT=.7;}},
  {d:1.5,cap:()=>'She takes it from the front edge.',go(){S.handKey='item';},end(){S.held=true;S.hl=false;}},
  {d:3.2,cap:()=>'No leaning out of her chair and no waiting for help.',go(){S.handKey='rest';}},
- {d:5,cap:()=>'If something blocks the shelf, a sensor pauses it, and STOP holds it at any time. Try the panel below.',go(){S.yawT=1.15;}}
+ {d:5,cap:()=>'If something blocks the shelf, a sensor pauses it, and STOP holds it at any time. Try the panel below.',go(){S.yawT=.8;}}
 ];
 function resetScene(){car.a=0;car.t=0;car.v=0;setBlocked(false);S.held=false;S.hl=false;S.handKey='rest';mark(0);S.stopFlash=0;S.pressT=0;}
-function startDemo(){resetScene();S.pz=2.0;S.hand=restPos();S.userCam=false;demo.on=true;demo.i=-1;demo.t=0;nextStep();setStatus('Spices section is at the front.');}
+function startDemo(){resetScene();S.pitchT=.2;S.pz=2.0;S.hand=restPos();S.userCam=false;demo.on=true;demo.i=-1;demo.t=0;nextStep();setStatus('Spices section is at the front.');}
 function nextStep(){if(demo.i>=0&&STEPS[demo.i].end)STEPS[demo.i].end();demo.i++;demo.t=0;
   if(demo.i>=STEPS.length){demo.on=false;$('stepn').textContent='Done';$('prog').style.width='100%';return;}
   const s=STEPS[demo.i];s.go();$('cap').textContent=s.cap();$('stepn').textContent='Step '+(demo.i+1)+' of '+STEPS.length;}
@@ -361,13 +389,15 @@ function frame(ms){
   S.hand=lerp3(S.hand,handGoal(),Math.min(1,dt*(S.handKey==='rest'&&Math.abs(S.pzT-S.pz)>.01?30:5)));
   if(S.pressT>0)S.pressT-=dt;if(S.stopFlash>0)S.stopFlash-=dt;
   if(!S.userCam&&S.yawT!==null)S.yaw+=(S.yawT-S.yaw)*Math.min(1,dt*1.3);
+  if(!S.userCam&&S.pitchT!==null)S.pitch+=(S.pitchT-S.pitch)*Math.min(1,dt*1.3);
   /* draw */
   const dpr=Math.min(2,window.devicePixelRatio||1),w=Math.round(cv.clientWidth*dpr),h=Math.round(cv.clientHeight*dpr);
   if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;}
   gl.viewport(0,0,w,h);gl.clearColor(S.clear[0],S.clear[1],S.clear[2],1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-  build();
   const asp=w/h,ctr=[0,.72,.3],dist=S.dist*(asp<1?1.25:1);
   const eye=[ctr[0]+dist*Math.cos(S.pitch)*Math.sin(S.yaw),ctr[1]+dist*Math.sin(S.pitch),ctr[2]+dist*Math.cos(S.pitch)*Math.cos(S.yaw)];
+  S.eye=eye;
+  build();
   gl.uniformMatrix4fv(uVP,false,new Float32Array(mul(persp(.6,asp,.1,30),lookAt(eye,ctr,[0,1,0]))));
   gl.uniform3f(uEye,eye[0],eye[1],eye[2]);
   gl.disable(gl.BLEND);gl.depthMask(true);
