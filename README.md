@@ -8,8 +8,9 @@ Static single-page site for a UC Berkeley **DES INV 15** (Fall 2026) design meth
 - `styles.css`: layout, palette (CSS variables), and responsive styles
 - `images/`: team photos (`minseo.jpg`, `leo.jpg`, `aadi.jpg`), creative matrix (`creative-matrix.png`), and source PDFs (`margaret-persona.pdf`, `abstract-ladder.pdf`)
 - `assets/wk10/`: Week 10 sketches, presentation, and (when added) review/test-plan/gantt PDFs plus prototype photo
+- `assets/wk11/`: project plan images/PDF, value proposition boards, low-fi prototype photo
 
-Problem illustrations and charts are inline SVGs in `index.html`. Persona, abstract laddering, and creative matrix sections live after How Might We. Week 10 Update, sketches, and presentation sit after the matrix.
+Problem illustrations are inline SVGs in `index.html`. Target users are wheelchair users (Week 11 pivot). Week 11 Project Plan, Value Proposition, and Prototyping sections sit after the Week 9 presentation.
 
 ## Team photos
 
