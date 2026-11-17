@@ -1062,3 +1062,34 @@ tr + tr td {
     transition: none !important;
   }
 }
+
+/* Week 12: embedded 3D model */
+.model-frame {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #eef2f1;
+  margin: var(--space-md) 0;
+}
+
+.model-frame iframe {
+  display: block;
+  width: 100%;
+  height: 1340px;
+  border: 0;
+}
+
+@media (max-width: 760px) {
+  .model-frame iframe {
+    height: 1680px;
+  }
+}
+
+.sketch-grid--wide {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.sketch-grid--wide .sketch-link img {
+  aspect-ratio: auto;
+  object-fit: contain;
+}
